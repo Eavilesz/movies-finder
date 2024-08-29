@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo, useCallback } from 'react';
 import { searchMovies } from '../services/movies';
 
-export function useMovies({ search }) {
+export function useMovies({ search, sort }) {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -9,7 +9,8 @@ export function useMovies({ search }) {
   // This variable is to keep track of the last search, so we avoid doing a search with the same input
   const previousSearch = useRef(search);
 
-  const getMovies = async () => {
+  // We pass the search value as a prop so that we don't need to put it into the dependencies array
+  const getMovies = useCallback(async ({ search }) => {
     // Don't forget to use current from the ref!!
     if (search === previousSearch.current) return;
     try {
@@ -24,7 +25,13 @@ export function useMovies({ search }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  return { movies, getMovies, loading };
+  const sortedMovies = useMemo(() => {
+    return sort
+      ? [...movies].sort((a, b) => a.title.localeCompare(b.title))
+      : movies;
+  }, [sort, movies]);
+
+  return { movies: sortedMovies, getMovies, loading };
 }
