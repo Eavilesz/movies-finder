@@ -21,4 +21,8 @@ Run the development server
 npm run dev
 ```
 
-<!-- TODO: updated after adding tests -->
+Run the tests
+
+```
+npm run test
+```

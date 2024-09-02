@@ -2,7 +2,9 @@ export const Searchform = (props) => {
   const { handleSubmit, error, handleChange, search, sort, handleSort } = props;
   return (
     <form className="form" onSubmit={handleSubmit}>
+      <label htmlFor="movie-search">Search for a movie:</label>
       <input
+        id="movie-search"
         style={{
           border: '1px solid transparent',
           borderColor: error ? 'red' : 'transparent',
